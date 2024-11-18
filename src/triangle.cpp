@@ -173,3 +173,4 @@ double Triangle::calcAvgPoint(double val1, double val2, double val3) const
 {
 	return (val1 + val2 + val3) / 3;
 }
+//hola
