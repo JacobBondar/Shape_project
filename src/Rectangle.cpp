@@ -165,4 +165,3 @@ bool Rectangle::checkDimension(double width, double height)
 
 	return false;
 }
-//healavta oti
