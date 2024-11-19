@@ -29,8 +29,8 @@ public:
 	bool scale(double factor);
 
 private:
-	Vertex m_bottom;
-	Vertex m_top;
+	Vertex m_bottom = { COL_BOTTOM_DEFAULT, ROW_BOTTOM_DEFAULT };
+	Vertex m_top = { COL_TOP_DEFAULT, ROW_TOP_DEFAULT };
 
 	// prototypes
 	bool checkNotValidPlace(const Vertex& bottomLeft, const Vertex& topRight);
@@ -38,7 +38,7 @@ private:
 		double colRight, double rowRight);
 	void setBuild(const Vertex& bottomLeft, const Vertex& topRight,
 		Vertex& m_bottom, Vertex& m_top);
-	bool checkDimension(double width, double  height);
+	bool validDimension(double width, double  height);
 	void insertWithDimension(const Vertex& buttomLeft, double width,
 		double height, Vertex& m_bottom, Vertex& m_top, int direction);
 	void afterFactor(const Vertex& center, Vertex& dot, double factor);

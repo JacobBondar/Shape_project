@@ -2,15 +2,21 @@
 #include "Rectangle.h"
 #include "macros.h"
 
+//-----------------------------------------------------------------------------
+
 Rectangle::Rectangle(const Vertex& bottomLeft, const Vertex& topRight)
 {
 	setBuild(bottomLeft, topRight, m_bottom, m_top);
 }
 
+//-----------------------------------------------------------------------------
+
 Rectangle::Rectangle(const Vertex vertices[2])
 {
 	setBuild(vertices[FIRST_INDEX], vertices[SECOND_INDEX], m_bottom, m_top);
 }
+
+//-----------------------------------------------------------------------------
 
 Rectangle::Rectangle(double x, double y, double width, double height)
 {
@@ -21,30 +27,42 @@ Rectangle::Rectangle(double x, double y, double width, double height)
 	insertWithDimension(buttomLeft, width, height, m_bottom, m_top, 1);
 }
 
+//-----------------------------------------------------------------------------
+
 Rectangle::Rectangle(const Vertex& topRight, double width, double height)
 {
 	insertWithDimension(topRight, width, height, m_bottom, m_top, -1);
 }
+
+//-----------------------------------------------------------------------------
 
 Vertex Rectangle::getBottomLeft() const
 {
 	return m_bottom;
 }
 
+//-----------------------------------------------------------------------------
+
 Vertex Rectangle::getTopRight() const
 {
 	return m_top;
 }
+
+//-----------------------------------------------------------------------------
 
 double Rectangle::getWidth() const
 {
 	return m_top.m_col - m_bottom.m_col;
 }
 
+//-----------------------------------------------------------------------------
+
 double Rectangle::getHeight() const
 {
 	return m_top.m_row - m_bottom.m_row;
 }
+
+//-----------------------------------------------------------------------------
 
 void Rectangle::draw(Board& board) const
 {
@@ -57,21 +75,29 @@ void Rectangle::draw(Board& board) const
 	board.drawLine(topLeft, m_bottom);
 }
 
+//-----------------------------------------------------------------------------
+
 Rectangle Rectangle::getBoundingRectangle() const
 {
 	Rectangle newRectangle(m_bottom, m_top);
 	return newRectangle;
 }
 
+//-----------------------------------------------------------------------------
+
 double Rectangle::getPerimeter() const
 {
 	return 2 * getWidth() + 2 * getHeight();
 }
 
+//-----------------------------------------------------------------------------
+
 double Rectangle::getArea() const
 {
 	return getWidth() * getHeight();
 }
+
+//-----------------------------------------------------------------------------
 
 Vertex Rectangle::getCenter() const
 {
@@ -81,6 +107,8 @@ Vertex Rectangle::getCenter() const
 
 	return center;
 }
+
+//-----------------------------------------------------------------------------
 
 bool Rectangle::scale(double factor)
 {
@@ -100,6 +128,8 @@ bool Rectangle::scale(double factor)
 	return true;
 }
 
+//-----------------------------------------------------------------------------
+
 void Rectangle::afterFactor(const Vertex& center, Vertex& dot, double factor)
 {
 	double width = (center.m_col - dot.m_col) * factor;
@@ -109,16 +139,12 @@ void Rectangle::afterFactor(const Vertex& center, Vertex& dot, double factor)
 	dot.m_row = center.m_row - height;
 }
 
+//-----------------------------------------------------------------------------
+
 void Rectangle::insertWithDimension(const Vertex& point, double width,
 	double height, Vertex& m_bottom, Vertex& m_top, int direction)
 {
-	if (checkDimension(width, height))
-	{
-		setData(m_bottom, m_top, COL_BOTTOM_DEFAULT, ROW_BOTTOM_DEFAULT,
-			COL_TOP_DEFAULT, ROW_TOP_DEFAULT);
-	}
-
-	else
+	if (validDimension(width, height))
 	{
 		Vertex secondPoint;
 		secondPoint.m_col = point.m_col + width * direction;
@@ -127,25 +153,30 @@ void Rectangle::insertWithDimension(const Vertex& point, double width,
 	}
 }
 
+//-----------------------------------------------------------------------------
+
 void Rectangle::setBuild(const Vertex& bottomLeft, const Vertex& topRight,
 	Vertex& m_bottom, Vertex& m_top)
 {
 	if (!bottomLeft.isValid() || !topRight.isValid() ||
 		checkNotValidPlace(bottomLeft, topRight))
 	{
-		setData(m_bottom, m_top, COL_BOTTOM_DEFAULT, ROW_BOTTOM_DEFAULT,
-			COL_TOP_DEFAULT, ROW_TOP_DEFAULT);
+		return;
 	}
 
-	else setData(m_bottom, m_top, bottomLeft.m_col, bottomLeft.m_row,
+	setData(m_bottom, m_top, bottomLeft.m_col, bottomLeft.m_row,
 		topRight.m_col, topRight.m_row);
 }
+
+//-----------------------------------------------------------------------------
 
 bool Rectangle::checkNotValidPlace(const Vertex& bottomLeft, const Vertex& topRight)
 {
 	return bottomLeft.isHigherThan(topRight) ||
 		bottomLeft.isToTheRightOf(topRight);
 }
+
+//-----------------------------------------------------------------------------
 
 void Rectangle::setData(Vertex& m_bottom, Vertex& m_top, double colLeft, double rowLeft,
 	double colRight, double rowRight)
@@ -156,12 +187,14 @@ void Rectangle::setData(Vertex& m_bottom, Vertex& m_top, double colLeft, double 
 	m_top.m_row = rowRight;
 }
 
-bool Rectangle::checkDimension(double width, double height)
+//-----------------------------------------------------------------------------
+
+bool Rectangle::validDimension(double width, double height)
 {
 	if (width < 0 || height < 0)
 	{
-		return true;
+		return false;
 	}
 
-	return false;
+	return true;
 }

@@ -2,16 +2,22 @@
 #include "triangle.h"
 #include "cmath"
 
+//-----------------------------------------------------------------------------
+
 Triangle::Triangle(const Vertex vertices[POINTS_IN_TRIANGLE])
 {
 	setBuild(vertices, m_first, m_second, m_third);
 }
+
+//-----------------------------------------------------------------------------
 
 Triangle::Triangle(Vertex v0, Vertex v1, Vertex v2)
 {
 	Vertex vertices[POINTS_IN_TRIANGLE] = { v0, v1, v2 };
 	setBuild(vertices, m_first, m_second, m_third);
 }
+
+//-----------------------------------------------------------------------------
 
 Vertex Triangle::getVertex(int index) const
 {
@@ -26,6 +32,8 @@ Vertex Triangle::getVertex(int index) const
 	}
 }
 
+//-----------------------------------------------------------------------------
+
 double Triangle::getLength(int index) const
 {
 	switch (index)
@@ -39,12 +47,16 @@ double Triangle::getLength(int index) const
 	}
 }
 
+//-----------------------------------------------------------------------------
+
 void Triangle::draw(Board& board) const
 {
 	board.drawLine(m_first, m_second);
 	board.drawLine(m_second, m_third);
 	board.drawLine(m_third, m_first);
 }
+
+//-----------------------------------------------------------------------------
 
 Rectangle Triangle::getBoundingRectangle() const
 {
@@ -64,12 +76,16 @@ Rectangle Triangle::getBoundingRectangle() const
 	return newRectangle;
 }
 
+//-----------------------------------------------------------------------------
+
 double Triangle::getPerimeter() const
 {
 	return distance(m_first, m_second) +
 		distance(m_second, m_third) +
 		distance(m_third, m_first);
 }
+
+//-----------------------------------------------------------------------------
 
 double Triangle::getArea() const
 {
@@ -83,6 +99,8 @@ double Triangle::getArea() const
 	return sqrt(s * sum);
 }
 
+//-----------------------------------------------------------------------------
+
 Vertex Triangle::getCenter() const
 {
 	Vertex center;
@@ -92,6 +110,8 @@ Vertex Triangle::getCenter() const
 
 	return center;
 }
+
+//-----------------------------------------------------------------------------
 
 bool Triangle::scale(double factor)
 {
@@ -113,6 +133,8 @@ bool Triangle::scale(double factor)
 	return true;
 }
 
+//-----------------------------------------------------------------------------
+
 void Triangle::afterFactor(const Vertex& center, Vertex& dot, double factor)
 {
 	double width = (center.m_col - dot.m_col) * factor;
@@ -122,10 +144,11 @@ void Triangle::afterFactor(const Vertex& center, Vertex& dot, double factor)
 	dot.m_row = center.m_row - height;
 }
 
+//-----------------------------------------------------------------------------
 
 void Triangle::setBuild(const Vertex vertices[POINTS_IN_TRIANGLE], Vertex& m_first, Vertex& m_second, Vertex& m_third)
 {
-	bool validTriangle = true, parallelLine = false;
+	bool validTriangle = true;
 	for (int point = 0; point < POINTS_IN_TRIANGLE; point++)
 	{
 		if (!vertices[point].isValid())
@@ -144,18 +167,13 @@ void Triangle::setBuild(const Vertex vertices[POINTS_IN_TRIANGLE], Vertex& m_fir
 				setData(m_first, m_second, m_third,
 					vertices[0].m_col, vertices[0].m_row,
 					vertices[1].m_col, vertices[1].m_row,
-					vertices[2].m_col, vertices[2].m_row); // maybe add enum
-				parallelLine = true;
+					vertices[2].m_col, vertices[2].m_row);
 			}
 		}
 	}
-	if (!parallelLine || !validTriangle)
-	{
-		setData(m_first, m_second, m_third, FIRST_COL_DEFAULT,
-			FIRST_ROW_DEFAULT, SECOND_COL_DEFAULT, SECOND_ROW_DEFAULT,
-			THIRD_COL_DEFAULT, THIRD_ROW_DEFAULT);
-	}
 }
+
+//-----------------------------------------------------------------------------
 
 void Triangle::setData(Vertex& m_first, Vertex& m_second,
 	Vertex& m_third, double firstCol, double firstRow, double secondCol,
@@ -168,6 +186,8 @@ void Triangle::setData(Vertex& m_first, Vertex& m_second,
 	m_third.m_col = thirdCol;
 	m_third.m_row = thirdRow;
 }
+
+//-----------------------------------------------------------------------------
 
 double Triangle::calcAvgPoint(double val1, double val2, double val3) const
 {

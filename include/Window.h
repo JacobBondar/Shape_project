@@ -1,7 +1,7 @@
 #pragma once
 #include "Vertex.h"
 #include "Rectangle.h"
-
+#include "Utilities.h"
 const int COL_DEFAULT = 15;
 const int ROW_DEFAULT = 25;
 
@@ -18,13 +18,15 @@ public:
     double getPerimeter() const;
     double getArea() const;
     Vertex getCenter() const;
-
+    bool scale(double factor);
 private:
-    Vertex m_point;
+    Vertex m_point = { COL_DEFAULT, ROW_DEFAULT };
     Rectangle m_rectangle = { {COL_BOTTOM_DEFAULT, ROW_BOTTOM_DEFAULT} ,
         {COL_TOP_DEFAULT, ROW_TOP_DEFAULT} };
-    void setDefault(Vertex& m_point, Rectangle& rectangle);
-    void checkingData(Rectangle m_rectangle, Vertex m_point);
-    Vertex insertingToArray() const;
-    double calculatingPerimeter(Vertex firstDot, Vertex secondDot) const;
+
+    bool checkingData(const Rectangle& rectangle, const Vertex& point);
+    void insertingToArray(Vertex dots[]) const;
+    void changingWindow(const Vertex& middleDot, Vertex& dot, double factor);
+    void insertingNewValues(Rectangle& rectangle, Vertex& point,
+        const Rectangle& rectangleCheck, const Vertex& pointCheck);
 };

@@ -28,9 +28,9 @@ public:
 	bool scale(double factor);
 
 private:
-	Vertex m_first;
-	Vertex m_second;
-	Vertex m_third;
+	Vertex m_first = { FIRST_COL_DEFAULT, FIRST_ROW_DEFAULT };
+	Vertex m_second = { SECOND_COL_DEFAULT, SECOND_ROW_DEFAULT };
+	Vertex m_third = { THIRD_COL_DEFAULT, THIRD_ROW_DEFAULT };
 
 	void setData(Vertex& m_first, Vertex& m_second,
 		Vertex& m_third, double firstCol, double firstRow, double secondCol,

@@ -1,130 +1,144 @@
 ﻿#include <iostream>
 #include "Window.h"
-
+//----------------------------------
 Window::Window(const Rectangle& rectangle, const Vertex& point)
 {
-	m_rectangle = rectangle;
-	m_point = point;
-
-	checkingData(m_rectangle, m_point);
+    insertingNewValues(m_rectangle, m_point, rectangle, point);
 }
-//------------------------------------
-void Window::setDefault(Vertex& m_point, Rectangle& rectangle)
+//----------------------------------
+void Window::insertingNewValues(Rectangle& rectangle, Vertex& point,
+    const Rectangle& rectangleCheck, const Vertex& pointCheck)
 {
-	Rectangle rectangleNew({ COL_BOTTOM_DEFAULT, ROW_BOTTOM_DEFAULT }, { COL_TOP_DEFAULT  , ROW_TOP_DEFAULT });
-	rectangle = rectangleNew;
-	m_point = { COL_DEFAULT  , ROW_DEFAULT };
+    if (checkingData(rectangleCheck, pointCheck))
+    {
+        rectangle = rectangleCheck;
+        point = pointCheck;
+    }
 }
 //----------------------------------
 Window::Window(const Vertex& topRight, double width, double height, const Vertex& point)
 {
-	Vertex newDot = { topRight.m_col - width , topRight.m_row - height };
-	Rectangle newRectangle({ newDot, topRight });
+    Vertex newDot = { topRight.m_col - width , topRight.m_row - height };
+    Rectangle newRectangle(newDot, topRight);
 
-	m_point = point;
+    insertingNewValues(m_rectangle, m_point, newRectangle, point);
 
-	checkingData(m_rectangle, m_point);
 }
 //-------------------------------------------
-void Window::checkingData(Rectangle m_rectangle, Vertex m_point)
+bool Window::checkingData(const Rectangle& rectangle, const Vertex& point)
 {
-	if (m_point.isHigherThan(m_rectangle.getTopRight()) ||
-		m_point.isToTheRightOf(m_rectangle.getTopRight()) ||
-		m_rectangle.getBottomLeft().isHigherThan(m_point) ||
-		m_rectangle.getBottomLeft().isToTheRightOf(m_point))
-	{
-		setDefault(m_point, m_rectangle);
-	}
+    if (point.isHigherThan(rectangle.getTopRight()) ||
+        point.isToTheRightOf(rectangle.getTopRight()) ||
+        rectangle.getBottomLeft().isHigherThan(point) ||
+        rectangle.getBottomLeft().isToTheRightOf(point))
+    {
+        return false;
+    }
+
+    return true;
 }
 //-------------------------------------------
 Vertex Window::getBottomLeft() const
 {
-	return m_rectangle.getBottomLeft();
+    return m_rectangle.getBottomLeft();
 }
 //--------------------------------------------
 Vertex Window::getTopRight()const
 {
-	return m_rectangle.getTopRight();
+    return m_rectangle.getTopRight();
 }
 //------------------------------------------
 Vertex Window::getPoint() const
 {
-	return m_point;
+    return m_point;
 }
-
+//------------------------------------------
 void Window::draw(Board& board) const
 {
+    Vertex dots[4];
 
-	Vertex dots[4];
+    insertingToArray(dots);
 
-	dots[4] = insertingToArray();
+    for (int index = 0; index < 4; index++)
+    {
+        board.drawLine(m_point, dots[index]);
+    }
 
-
-	for (int index = 0; index < 4; index++)
-	{
-		board.drawLine(m_point, dots[index]);
-	}
-
-	m_rectangle.draw(board);
+    m_rectangle.draw(board);
 }
 //-----------------------------------------
-Vertex Window::insertingToArray() const
+void  Window::insertingToArray(Vertex dots[]) const
 {
-	Vertex dots[4];
-	Vertex tempDown = m_rectangle.getBottomLeft();
-	Vertex tempUp = m_rectangle.getTopRight();
+    Vertex tempDown = m_rectangle.getBottomLeft();
+    Vertex tempUp = m_rectangle.getTopRight();
 
-	dots[0].m_col = dots[1].m_col = m_point.m_col;
-	dots[0].m_row = tempUp.m_row;
-	dots[1].m_row = tempDown.m_row;
-	dots[2].m_row = dots[3].m_row = m_point.m_row;
-	dots[3].m_col = tempDown.m_col;
-	dots[2].m_col = tempUp.m_col;
-	return dots[4];
+    dots[0].m_col = dots[1].m_col = m_point.m_col;
+    dots[0].m_row = tempUp.m_row;
+    dots[1].m_row = tempDown.m_row;
+    dots[2].m_row = dots[3].m_row = m_point.m_row;
+    dots[3].m_col = tempDown.m_col;
+    dots[2].m_col = tempUp.m_col;
+
 }
 //-----------------------------------------
 Rectangle Window::getBoundingRectangle() const
 {
-	return m_rectangle;
+    return m_rectangle;
 }
 //---------------------------------------
 double  Window::getPerimeter() const
 {
-	double perimeter = 0.0;
-	Vertex dots[4];
-	dots[4] = insertingToArray();
-	perimeter += calculatingPerimeter(m_point, m_rectangle.getTopRight());
-	perimeter += calculatingPerimeter(m_rectangle.getBottomLeft(), m_point);
-	perimeter += calculatingPerimeter(dots[1], dots[2]);
-	perimeter += calculatingPerimeter(dots[3], dots[0]);
-	perimeter += m_rectangle.getPerimeter();
-	return perimeter;
+    double perimeter = 0;
+    Vertex dots[4];
+    insertingToArray(dots);
 
-}
-//----------------------------------
-double Window::calculatingPerimeter(Vertex firstDot, Vertex secondDot) const
-{
-	double perimeterX = 0.0, perimeterY = 0.0;
-	perimeterX = secondDot.m_col - firstDot.m_col;
-	perimeterY = secondDot.m_row - firstDot.m_row;
-	perimeterX *= 2;
-	perimeterY *= 2;
 
-	return perimeterX + perimeterY;
+    perimeter = distance(dots[1], dots[2]) + distance(dots[3], dots[0]) +
+        m_rectangle.getPerimeter();
+
+    return perimeter;
+
 }
 //--------------------------------------------
 double Window::getArea() const
 {
-	//זה הכוונה או למשהו אחר?
-	return m_rectangle.getArea();
+    return m_rectangle.getArea();
 }
 //-------------------------------------------
 Vertex  Window::getCenter() const
 {
-	return m_point;
+    return m_point;
 }
 //------------------------------------------
-bool scale(double factor)
+bool Window::scale(double factor)
 {
+    if (factor < 0)
+    {
+        return false;
+    }
 
+    Vertex tempBottom = m_rectangle.getBottomLeft();
+    Vertex tempTop = m_rectangle.getTopRight();
+
+    changingWindow(m_point, tempTop, factor);
+    changingWindow(m_point, tempBottom, factor);
+
+    Rectangle tempRectangle(tempBottom, tempTop);
+
+    if (checkingData(tempRectangle, m_point) && tempTop.isValid() && tempBottom.isValid())
+    {
+        m_rectangle = tempRectangle;
+        return true;
+    }
+
+    return false;
+}
+//-------------------------------------------
+void Window::changingWindow(const Vertex& middleDot, Vertex& dot, double factor)
+{
+    double width = (middleDot.m_col - dot.m_col) * factor;
+    double height = (middleDot.m_row - dot.m_row) * factor;
+
+    dot.m_col = middleDot.m_col - width;
+    dot.m_row = middleDot.m_row - height;
 }
