@@ -3,6 +3,7 @@
 #include "Vertex.h"
 #include "triangle.h"
 
+//-----Class Section-----------------------------------------------------------
 class IsoscelesTriangle
 {
 public:
@@ -19,10 +20,12 @@ public:
 	bool scale(double factor);
 
 private:
+//-----Members-----------------------------------------------------------------
 	Triangle m_triangle = { {FIRST_COL_DEFAULT, FIRST_ROW_DEFAULT},
 	{SECOND_COL_DEFAULT, SECOND_ROW_DEFAULT},
 	{THIRD_COL_DEFAULT, THIRD_ROW_DEFAULT} };
 
+//-----Private Functions-------------------------------------------------------
 	void setIsoscelesTriangle(const Vertex vertices[]);
 	bool validIsoscelesTriangle(const Triangle& triangle);
 	Vertex findTop(const Triangle& triangle, double& bottom) const;

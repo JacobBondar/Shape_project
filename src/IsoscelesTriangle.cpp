@@ -40,10 +40,10 @@ double IsoscelesTriangle::getLength(int index) const
 
 double IsoscelesTriangle::getHeight() const
 {
-	double bottom_col = 0;
-	Vertex top = findTop(m_triangle, bottom_col);
+	double bottom_row = 0;
+	Vertex top = findTop(m_triangle, bottom_row);
 
-	return abs(top.m_col - bottom_col);
+	return abs(top.m_row - bottom_row);
 }
 
 //-----------------------------------------------------------------------------
@@ -124,17 +124,17 @@ Vertex IsoscelesTriangle::findTop(const Triangle& triangle, double& bottom) cons
 {
 	Vertex top;
 
-	if (sameCol(triangle.getVertex(0), triangle.getVertex(1)))
+	if (sameRow(triangle.getVertex(0), triangle.getVertex(1)))
 	{
 		top = triangle.getVertex(2);
-		bottom = triangle.getVertex(0).m_col;
+		bottom = triangle.getVertex(0).m_row;
 	}
 	else
 	{
 		top = triangle.getVertex(0).isHigherThan(triangle.getVertex(1))
 			? triangle.getVertex(0) : triangle.getVertex(1);
 
-		bottom = triangle.getVertex(2).m_col;
+		bottom = triangle.getVertex(2).m_row;
 	}
 
 	return top;

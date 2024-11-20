@@ -2,9 +2,12 @@
 #include "Vertex.h"
 #include "Rectangle.h"
 #include "Utilities.h"
+
+//-----Const Section-----------------------------------------------------------
 const int COL_DEFAULT = 15;
 const int ROW_DEFAULT = 25;
 
+//-----Class Section-----------------------------------------------------------
 class Window
 {
 public:
@@ -19,13 +22,19 @@ public:
     double getArea() const;
     Vertex getCenter() const;
     bool scale(double factor);
+
 private:
+//-----Members-----------------------------------------------------------------
     Vertex m_point = { COL_DEFAULT, ROW_DEFAULT };
-    Rectangle m_rectangle = { {COL_BOTTOM_DEFAULT, ROW_BOTTOM_DEFAULT} ,
+    Rectangle m_rectangle = { {COL_BOTTOM_DEFAULT, ROW_BOTTOM_DEFAULT},
         {COL_TOP_DEFAULT, ROW_TOP_DEFAULT} };
 
+//-----Private Functions-------------------------------------------------------
     bool checkingData(const Rectangle& rectangle, const Vertex& point);
-    void insertingToArray(Vertex dots[]) const;
+    void insertVertexes(Vertex& top, Vertex& bottom, Vertex& right, 
+        Vertex& left) const;
+    void drawExtra(Board& board, Vertex& top, Vertex& bottom, Vertex& right,
+        Vertex& left) const;
     void changingWindow(const Vertex& middleDot, Vertex& dot, double factor);
     void insertingNewValues(Rectangle& rectangle, Vertex& point,
         const Rectangle& rectangleCheck, const Vertex& pointCheck);

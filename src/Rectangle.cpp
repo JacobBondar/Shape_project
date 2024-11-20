@@ -159,10 +159,7 @@ void Rectangle::setBuild(const Vertex& bottomLeft, const Vertex& topRight,
 	Vertex& m_bottom, Vertex& m_top)
 {
 	if (!bottomLeft.isValid() || !topRight.isValid() ||
-		checkNotValidPlace(bottomLeft, topRight))
-	{
-		return;
-	}
+		checkNotValidPlace(bottomLeft, topRight)) return;
 
 	setData(m_bottom, m_top, bottomLeft.m_col, bottomLeft.m_row,
 		topRight.m_col, topRight.m_row);
@@ -170,7 +167,8 @@ void Rectangle::setBuild(const Vertex& bottomLeft, const Vertex& topRight,
 
 //-----------------------------------------------------------------------------
 
-bool Rectangle::checkNotValidPlace(const Vertex& bottomLeft, const Vertex& topRight)
+bool Rectangle::checkNotValidPlace(const Vertex& bottomLeft, 
+	const Vertex& topRight)
 {
 	return bottomLeft.isHigherThan(topRight) ||
 		bottomLeft.isToTheRightOf(topRight);
@@ -178,8 +176,8 @@ bool Rectangle::checkNotValidPlace(const Vertex& bottomLeft, const Vertex& topRi
 
 //-----------------------------------------------------------------------------
 
-void Rectangle::setData(Vertex& m_bottom, Vertex& m_top, double colLeft, double rowLeft,
-	double colRight, double rowRight)
+void Rectangle::setData(Vertex& m_bottom, Vertex& m_top, double colLeft, 
+	double rowLeft, double colRight, double rowRight)
 {
 	m_bottom.m_col = colLeft;
 	m_bottom.m_row = rowLeft;
@@ -191,10 +189,6 @@ void Rectangle::setData(Vertex& m_bottom, Vertex& m_top, double colLeft, double 
 
 bool Rectangle::validDimension(double width, double height)
 {
-	if (width < 0 || height < 0)
-	{
-		return false;
-	}
-
+	if (width < 0 || height < 0) return false;
 	return true;
 }

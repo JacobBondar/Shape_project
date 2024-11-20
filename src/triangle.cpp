@@ -29,6 +29,8 @@ Vertex Triangle::getVertex(int index) const
 		return m_second;
 	case 2:
 		return m_third;
+	default:
+		return m_first;
 	}
 }
 
@@ -44,6 +46,8 @@ double Triangle::getLength(int index) const
 		return distance(m_second, m_third);
 	case 2:
 		return distance(m_third, m_first);
+	default:
+		return distance(m_first, m_second);
 	}
 }
 
@@ -90,7 +94,7 @@ double Triangle::getPerimeter() const
 double Triangle::getArea() const
 {
 	double s = getPerimeter() / 2;
-	double sum = 0;
+	double sum = 1;
 	for (int index = 0; index < 3; index++)
 	{
 		sum *= (s - getLength(index));

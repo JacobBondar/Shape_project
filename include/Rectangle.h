@@ -3,6 +3,7 @@
 #include "Vertex.h"
 #include "Board.h"
 
+//-----Const Section-----------------------------------------------------------
 const double COL_BOTTOM_DEFAULT = 20;
 const double ROW_BOTTOM_DEFAULT = 10;
 const double COL_TOP_DEFAULT = 30;
@@ -10,6 +11,7 @@ const double ROW_TOP_DEFAULT = 20;
 const int FIRST_INDEX = 0;
 const int SECOND_INDEX = 1;
 
+//-----Class Section-----------------------------------------------------------
 class Rectangle
 {
 public:
@@ -29,10 +31,11 @@ public:
 	bool scale(double factor);
 
 private:
+//-----Members-----------------------------------------------------------------
 	Vertex m_bottom = { COL_BOTTOM_DEFAULT, ROW_BOTTOM_DEFAULT };
 	Vertex m_top = { COL_TOP_DEFAULT, ROW_TOP_DEFAULT };
 
-	// prototypes
+//-----Private Functions-------------------------------------------------------
 	bool checkNotValidPlace(const Vertex& bottomLeft, const Vertex& topRight);
 	void setData(Vertex& m_bottom, Vertex& m_top, double colLeft, double rowLeft,
 		double colRight, double rowRight);
